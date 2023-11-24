@@ -1,0 +1,15 @@
+@import './variables';
+
+body {
+  margin: 0;
+  height: 100vh;
+  color: $white;
+  font-family: $font;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
