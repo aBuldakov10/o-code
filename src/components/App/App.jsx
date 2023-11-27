@@ -11,13 +11,16 @@ import useGetWeather from '../../hooks/useGetWeather';
 import TemperatureIcon from '../Icons/TemperatureIcon';
 import WindIcon from '../Icons/WindIcon';
 import BarometerIcon from '../Icons/BarometerIcon';
+import useGetWeatherWeek from '../../hooks/useGetWeatherWeek';
 
 const App = () => {
   const { latitude, longitude, error } = useLocationCoord(); // get location coord
   const [weatherData, getWeather] = useGetWeather(); // weather data, get weather callback
+  const [weatherWeekData, getWeatherWeek] = useGetWeatherWeek(); // weather data, get weather callback
 
   useEffect(() => {
     getWeather(latitude, longitude);
+    getWeatherWeek(latitude, longitude);
   }, [latitude, longitude]);
 
   return (
@@ -90,7 +93,33 @@ const App = () => {
           </div>
 
           {/*** Weather week list ***/}
-          <div className="weather__week">weather week</div>
+          <div className="weather__week">
+            <div className="weather-week-slider">
+              {weatherWeekData &&
+                Object.values(weatherWeekData)[1].map((item) => {
+                  return (
+                    <div className="weather-week-slider__item" key={item.id}>
+                      <div className="weather__day-item weather__day-date">{convertDate(item?.dt)}</div>
+                      <div className="weather__day-item weather__day-desc">{item?.weather[0].description}</div>
+
+                      <div className="weather__day-item weather__day-img">
+                        <img
+                          src={`${weatherIconUrl}/wn/${item?.weather[0].icon}@2x.png`}
+                          alt="weather-icon"
+                          title={item?.weather[0].description}
+                        />
+                      </div>
+
+                      <div className="weather-week-slider__day">Днем {Math.round(item?.temp_day)} &#8451;</div>
+                      <div className="weather-week-slider__night">Ночью {Math.round(item?.temp_night)} &#8451;</div>
+                      <div className="weather-week-slider__wind">
+                        Ветер: {convertWindDirection(item?.wind.deg)} {item?.wind.speed} м/с
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
+          </div>
         </div>
       </div>
     </div>

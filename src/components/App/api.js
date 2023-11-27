@@ -10,3 +10,10 @@ export const fetchWeather = async (lat, lon) => {
 
   return await response.json();
 };
+
+export const fetchWeatherWeek = async (lat, lon) => {
+  const apiRequest = `${apiDomain}/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&lang=ru&units=metric`;
+  const response = await fetch(apiRequest);
+
+  return await response.json();
+};

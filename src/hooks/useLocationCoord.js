@@ -12,7 +12,7 @@ const useLocationCoord = () => {
 
           setUserLocation({ latitude, longitude });
         },
-        (error) => setError('Геолокация пользваотеля отключена')
+        (error) => setError('Геолокация пользователя отключена')
       );
     } else {
       setError('Геолокация не поддерживается браузером');
