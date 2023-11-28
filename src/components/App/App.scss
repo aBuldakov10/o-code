@@ -12,13 +12,17 @@
     background-position: center;
     background-size: cover;
     background-image: url("./bg.jpg");
+
+    &.blur {
+      filter: blur(2px);
+    }
   }
 
   // Weather day
   &__day {
     padding: 10px;
     color: $white;
-    border-radius: 8px;
+    border-radius: $radius;
     border: $border;
     background-color: rgba(34, 5, 74, .6);
 
