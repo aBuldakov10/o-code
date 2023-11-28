@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 // Files
 import './App.scss';
@@ -6,22 +6,61 @@ import { weatherIconUrl } from './api';
 import { convertTime, convertDate, convertWindDirection } from './index';
 
 // Components
-import useLocationCoord from '../../hooks/useLocationCoord';
-import useGetWeather from '../../hooks/useGetWeather';
 import TemperatureIcon from '../Icons/TemperatureIcon';
 import WindIcon from '../Icons/WindIcon';
 import BarometerIcon from '../Icons/BarometerIcon';
+
+// Hooks
+import useLocationCoord from '../../hooks/useLocationCoord';
+import useGetWeather from '../../hooks/useGetWeather';
 import useGetWeatherWeek from '../../hooks/useGetWeatherWeek';
+import useMedia from '../../hooks/useMedia';
 
 const App = () => {
+  const weatherItem = useRef(null);
   const { latitude, longitude, error } = useLocationCoord(); // get location coord
   const [weatherData, getWeather] = useGetWeather(); // weather data, get weather callback
   const [weatherWeekData, getWeatherWeek] = useGetWeatherWeek(); // weather data, get weather callback
+  const mob = useMedia('(max-width: 575px)');
+  const desk = useMedia('(min-width: 992px)');
+
+  const tab = !mob && !desk;
+  let sliderCount = 1;
+
+  const [translateSlider, setTranslateSlider] = useState(0);
+  const [weatherItemWidth, setWeatherItemWidth] = useState(0);
 
   useEffect(() => {
     getWeather(latitude, longitude);
     getWeatherWeek(latitude, longitude);
   }, [latitude, longitude]);
+
+  useEffect(() => {
+    setWeatherItemWidth(weatherItem.current?.offsetWidth + 20);
+  }, [weatherWeekData]);
+
+  /*** Handlers ***/
+  const handlePrev = () => {
+    setTranslateSlider((prevState) => {
+      if (prevState <= 0) return 0;
+
+      return prevState - weatherItemWidth;
+    });
+  };
+
+  const handleNext = () => {
+    if (tab) sliderCount = 2;
+    if (desk) sliderCount = 3;
+
+    // // ширина скрытых elem
+    const lengthHidden = (weatherWeekData && Object.values(weatherWeekData)[1].length - sliderCount) * weatherItemWidth;
+
+    setTranslateSlider((prevState) => {
+      if (lengthHidden < prevState + weatherItemWidth) return prevState;
+
+      return prevState + weatherItemWidth;
+    });
+  };
 
   return (
     <div className="weather-wrapper">
@@ -94,11 +133,11 @@ const App = () => {
 
           {/*** Weather week list ***/}
           <div className="weather__week">
-            <div className="weather-week-slider">
+            <div className="weather-week-slider" style={{ transform: `translateX(-${translateSlider}px)` }}>
               {weatherWeekData &&
                 Object.values(weatherWeekData)[1].map((item) => {
                   return (
-                    <div className="weather-week-slider__item" key={item.id}>
+                    <div className="weather-week-slider__item" ref={weatherItem} key={item.id}>
                       <div className="weather__day-item weather__day-date">{convertDate(item?.dt)}</div>
                       <div className="weather__day-item weather__day-desc">{item?.weather[0].description}</div>
 
@@ -119,6 +158,16 @@ const App = () => {
                   );
                 })}
             </div>
+          </div>
+
+          <div className="action">
+            <button className="btn btn--bg" onClick={handlePrev}>
+              prev
+            </button>
+
+            <button className="btn btn--bg" onClick={handleNext}>
+              next
+            </button>
           </div>
         </div>
       </div>

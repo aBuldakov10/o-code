@@ -4,7 +4,6 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 50px;
   height: 100%;
 
   &-wrapper {
@@ -95,6 +94,7 @@
 // Location info
 .location-info {
   margin-left: auto;
+  margin-bottom: 50px;
   max-width: 50%;
   text-align: right;
 
@@ -119,18 +119,36 @@
 }
 
 // Weather slider
+.weather__week {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 810px;
+  width: 100%;
+  overflow: hidden;
+}
+
 .weather-week-slider {
   display: flex;
-  gap: 15px;
+  transition: $transition;
 
   &__item {
-    flex: 0 0 250px;
+    flex: 0 0 calc(100% - 20px);
+    margin: 0 10px;
     padding: 15px;
     color: $white;
     border-radius: 8px;
     border: $border;
     background-color: rgba(34, 5, 74, .6);
     text-align: center;
+
+    @media (min-width: 576px) {
+      flex: 0 0 calc(50% - 20px);
+    }
+
+    @media (min-width: 992px) {
+      flex: 0 0 250px;
+    }
   }
 
   &__day,
@@ -146,4 +164,11 @@
   &__wind {
     font-size: 12px;
   }
+}
+
+.action {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
 }
