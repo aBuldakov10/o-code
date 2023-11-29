@@ -1,8 +1,10 @@
 // Get time
 export const convertTime = (secondsValue) => {
-  const time = new Date(secondsValue * 1000);
+  if (secondsValue) {
+    const time = new Date(secondsValue * 1000);
 
-  return time.toLocaleTimeString();
+    return time.toLocaleTimeString();
+  }
 };
 
 // Get date
