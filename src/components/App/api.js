@@ -1,8 +1,8 @@
 /*** Weather api variables ***/
 export const apiKey = '641c47dcb8a7b9d976c1925431f690f7';
 export const apiDomain = 'https://api.openweathermap.org/data/2.5';
-export const apiGeoDomain = 'http://api.openweathermap.org/geo/1.0';
-export const weatherIconUrl = 'http://openweathermap.org/img';
+export const apiGeoDomain = 'https://api.openweathermap.org/geo/1.0';
+export const weatherIconUrl = 'https://openweathermap.org/img';
 
 /*** Get weather data by city id ***/
 export const fetchWeather = async (lat, lon) => {
